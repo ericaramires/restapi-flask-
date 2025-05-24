@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 from flask_mongoengine import MongoEngine
 
 
@@ -13,13 +13,36 @@ app.config['MONGODB_SETTINGS'] = {
     "password": 'admin'
 }
 
+_user_parser = reqparse.RequestParser()
+_user_parser.add_argument('name',
+                         type=str,
+                         required=True,
+                         help='This field cannot be blank')
+_user_parser.add_argument('last_name',
+                         type=str,
+                         required=True,
+                         help='This field cannot be blank')
+_user_parser.add_argument('cpf',
+                         type=str,
+                         required=True,
+                         help='This field cannot be blank')
+_user_parser.add_argument('email',
+                         type=str,
+                         required=True,
+                         help='This field cannot be blank')
+_user_parser.add_argument('birth_date',
+                         type=str,
+                         required=True,
+                         help='This field cannot be blank')
+
+
 api = Api(app)
 db = MongoEngine(app)
 
 
 class UserModel(db.Document):
     cpf = db.StringField(required=True, unique=True)
-    first_name = db.StringField(required=True)
+    name = db.StringField(required=True)
     last_name = db.StringField(required=True)
     email = db.EmailField(required=True)
     birth_date = db.DateField(required=True)
@@ -29,11 +52,14 @@ class Users(Resource):
     def get(self):
         return {"message": "Lista de usuários"}
 
-
-class User(Resource):
     def post(self):
+        data = _user_parser.parse_args()
+        user_to_save = UserModel(**data)
+        user_to_save.save()
         return {"message": "Usuário criado com sucesso"}
 
+
+class User(Resource):
     def get(self, cpf):
         return {"message": f"CPF {cpf}"}
 
