@@ -1,12 +1,18 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Resource, Api, reqparse
-from flask_mongoengine import MongoEngine
+
+from mongoengine import NotUniqueError
 import re
-from config import DevConfig
 
 app = Flask(__name__)
 
-app.config['MONGODB_SETTINGS'] = DevConfig.MONGODB_SETTINGS
+app.config['MONGODB_SETTINGS'] = {
+    'db': 'users',
+    'host': 'mongodb',
+    'port': 27017,
+    "username": 'admin',
+    "password": 'admin'
+}
 
 _user_parser = reqparse.RequestParser()
 _user_parser.add_argument('name',
@@ -31,7 +37,6 @@ _user_parser.add_argument('birth_date',
                         help='This field cannot be blank')
 
 api = Api(app)
-db = MongoEngine(app)
 
 
 class UserModel(db.Document):
@@ -44,7 +49,7 @@ class UserModel(db.Document):
 
 class Users(Resource):
     def get(self):
-        return {"message": "Lista de usuários"}
+        return jsonify(UserModel.objects())
 
     def validate_cpf(self, cpf):
         """
@@ -95,23 +100,23 @@ class Users(Resource):
         data = _user_parser.parse_args()
 
         if not self.validate_cpf(data['cpf']):
-            return {"message": "CPF invalid"}
-        user = UserModel(**data).save()
-        return {
-            "message": f"User {user.name} successfully created!",
-            "data": {
-                "cpf": user.cpf,
-                "name": user.name,
-                "last_name": user.last_name,
-                "email": user.email,
-                "birth_date": str(user.birth_date)
-            }
-        }
+            return {"message": "CPF invalid"}, 400
+
+        try:
+            response = UserModel(**data).save()
+            return {"message": "User %s sucessfully created!" % response.id}
+        except NotUniqueError:
+            return {"message": "CPF already exists in database"}, 400
 
 
 class User(Resource):
     def get(self, cpf):
-        return {"message": f"CPF {cpf}"}
+        response = UserModel.objects(cpf=cpf)
+        if response:
+            return jsonify(response)
+        else:
+            return {"message": "User not found"}, 400
+
 
 
 class Home(Resource):
@@ -124,4 +129,4 @@ api.add_resource(User, '/user/<string:cpf>')
 api.add_resource(Home, '/')
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0") 
+    app.run(debug=True, host="0.0.0.0")
