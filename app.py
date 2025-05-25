@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Resource, Api, reqparse
 from flask_mongoengine import MongoEngine
 import re
@@ -44,7 +44,20 @@ class UserModel(db.Document):
 
 class Users(Resource):
     def get(self):
-        return {"message": "Lista de usuários"}
+        try:
+            users = UserModel.objects.all()
+            return jsonify({
+                "message": "Lista de usuários",
+                "data": [{
+                    "cpf": user.cpf,
+                    "name": user.name,
+                    "last_name": user.last_name,
+                    "email": user.email,
+                    "birth_date": str(user.birth_date)
+                } for user in users]
+            })
+        except Exception as e:
+            return {"message": f"Error: {str(e)}"}, 500
 
     def validate_cpf(self, cpf):
         """
@@ -92,26 +105,49 @@ class Users(Resource):
         return True
 
     def post(self):
-        data = _user_parser.parse_args()
+        try:
+            data = _user_parser.parse_args()
 
-        if not self.validate_cpf(data['cpf']):
-            return {"message": "CPF invalid"}
-        user = UserModel(**data).save()
-        return {
-            "message": f"User {user.name} successfully created!",
-            "data": {
-                "cpf": user.cpf,
-                "name": user.name,
-                "last_name": user.last_name,
-                "email": user.email,
-                "birth_date": str(user.birth_date)
-            }
-        }
+            if not self.validate_cpf(data['cpf']):
+                return {"message": "CPF invalid"}, 400
+
+            # Check if user already exists
+            if UserModel.objects(cpf=data['cpf']).first():
+                return {"message": "User with this CPF already exists"}, 400
+
+            user = UserModel(**data).save()
+            return {
+                "message": f"User {user.name} successfully created!",
+                "data": {
+                    "cpf": user.cpf,
+                    "name": user.name,
+                    "last_name": user.last_name,
+                    "email": user.email,
+                    "birth_date": str(user.birth_date)
+                }
+            }, 201
+        except Exception as e:
+            return {"message": f"Error: {str(e)}"}, 500
 
 
 class User(Resource):
     def get(self, cpf):
-        return {"message": f"CPF {cpf}"}
+        try:
+            user = UserModel.objects(cpf=cpf).first()
+            if not user:
+                return {"message": "User not found"}, 404
+            return {
+                "message": "User found",
+                "data": {
+                    "cpf": user.cpf,
+                    "name": user.name,
+                    "last_name": user.last_name,
+                    "email": user.email,
+                    "birth_date": str(user.birth_date)
+                }
+            }
+        except Exception as e:
+            return {"message": f"Error: {str(e)}"}, 500
 
 
 class Home(Resource):
@@ -124,4 +160,4 @@ api.add_resource(User, '/user/<string:cpf>')
 api.add_resource(Home, '/')
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0") 
+    app.run(debug=True, host="0.0.0.0", port=5001) 
