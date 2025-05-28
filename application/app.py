@@ -1,18 +1,12 @@
-from flask import Flask, jsonify
-from flask_restful import Resource, Api, reqparse
-
+from flask import jsonify
+from flask_restful import Resource, reqparse
 from mongoengine import NotUniqueError
+from .model import UserModel
 import re
 
-app = Flask(__name__)
 
-app.config['MONGODB_SETTINGS'] = {
-    'db': 'users',
-    'host': 'mongodb',
-    'port': 27017,
-    "username": 'admin',
-    "password": 'admin'
-}
+
+
 
 _user_parser = reqparse.RequestParser()
 _user_parser.add_argument('name',
@@ -36,15 +30,10 @@ _user_parser.add_argument('birth_date',
                         required=True,
                         help='This field cannot be blank')
 
-api = Api(app)
 
 
-class UserModel(db.Document):
-    cpf = db.StringField(required=True, unique=True)
-    name = db.StringField(required=True)
-    last_name = db.StringField(required=True)
-    email = db.EmailField(required=True)
-    birth_date = db.DateField(required=True)
+
+
 
 
 class Users(Resource):
@@ -124,9 +113,5 @@ class Home(Resource):
         return {"message": "Bem-vindo à API!"}
 
 
-api.add_resource(Users, '/users')
-api.add_resource(User, '/user/<string:cpf>')
-api.add_resource(Home, '/')
 
-if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0")
+
