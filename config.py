@@ -1,5 +1,6 @@
 import os
 
+
 class DevConfig:
     MONGODB_SETTINGS = {
         'db': os.getenv('MONGODB_DB', 'users'),
@@ -14,12 +15,23 @@ class DevConfig:
     MONGODB_USERNAME = os.getenv('MONGODB_USERNAME', 'admin')
     MONGODB_PASSWORD = os.getenv('MONGODB_PASSWORD', 'admin')
 
+
 class MockConfig:
+    MONGODB_DB = 'users_test'
+    MONGODB_HOST = 'localhost'
+    MONGODB_PORT = 27018
+    MONGODB_USERNAME = 'admin'
+    MONGODB_PASSWORD = 'admin'
+
+    # Podes manter MONGODB_SETTINGS se quiseres
     MONGODB_SETTINGS = {
-        'db': 'users_test',
-        'host': 'mongodb://localhost:27018',
-        'port': 27018
+        'db': MONGODB_DB,
+        'host': MONGODB_HOST,
+        'port': MONGODB_PORT,
+        'username': MONGODB_USERNAME,
+        'password': MONGODB_PASSWORD
     }
+
 
 class Config:
     MONGODB_DB = 'restapi_flask'

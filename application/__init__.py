@@ -5,7 +5,7 @@ from .app import Users, User, Home
 
 
 def create_app(config):
-    app = Flask(__name__) 
+    app = Flask(__name__)
     api = Api(app)
     app.config.from_object(config)
     init_db(app)
@@ -15,5 +15,3 @@ def create_app(config):
     api.add_resource(Home, '/')
 
     return app
-
- 

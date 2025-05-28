@@ -1,8 +1,10 @@
 from mongoengine import connect
 
+
 def init_db(app):
     """
-    Initialize the database connection using the configuration from the Flask app
+    Initialize the database connection using the configuration from the
+    Flask app
     """
     try:
         connect(
