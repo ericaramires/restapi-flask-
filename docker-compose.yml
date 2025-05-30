@@ -9,6 +9,7 @@ services:
       - mongodb
     environment:
       - FLASK_DEBUG=1
+      - FLASK_ENV=development
       - MONGODB_DB=users
       - MONGODB_HOST=mongodb
       - MONGODB_PORT=27017
