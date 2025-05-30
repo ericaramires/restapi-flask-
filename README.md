@@ -58,12 +58,18 @@ Access to a MongoDB instance (for the production environment, usually a cluster 
 
 1. Create and Activate a Virtual Environment (Recommended)
 python -m venv venv
-# On Linux/macOS:
+
+On Linux/macOS:
+
 source venv/bin/activate
-# On Windows (PowerShell):
-# .\venv\Scripts\Activate.ps1
-# On Windows (CMD):
-# venv\Scripts\activate.bat
+
+On Windows (PowerShell):
+
+.\venv\Scripts\Activate.ps1
+
+On Windows (CMD):
+
+venv\Scripts\activate.bat
 
 2. Install Dependencies
 pip install -r requirements.txt
@@ -200,44 +206,50 @@ docker-compose up --build
 
 Option 2: Local Execution (Without Docker)
 For Development Environment:
+On Linux/macOS:
 
-# Linux/macOS
 export FLASK_ENV=development # or can be omitted, as it's the default
 python wsgi.py
 
-# Windows (PowerShell)
+On Windows (PowerShell):
+
 $env:FLASK_ENV="development"
 python wsgi.py
 
-# Windows (CMD)
+On Windows (CMD):
+
 set FLASK_ENV=development
 python wsgi.py
 
 For Production Environment:
+On Linux/macOS:
 
-# Linux/macOS
 export FLASK_ENV=production
 python wsgi.py
 
-# Windows (PowerShell)
+On Windows (PowerShell):
+
 $env:FLASK_ENV="production"
 python wsgi.py
 
-# Windows (CMD)
+On Windows (CMD):
+
 set FLASK_ENV=production
 python wsgi.py
 
 For Testing Environment:
+On Linux/macOS:
 
-# Linux/macOS
 export FLASK_ENV=testing
 python wsgi.py # Or run tests directly
 
-# Windows (PowerShell)
+On Windows (PowerShell):
+
 $env:FLASK_ENV="testing"
 python wsgi.py
 
-# Windows (CMD)
+On Windows (CMD):
+
 set FLASK_ENV=testing
 python wsgi.py
 
