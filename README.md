@@ -1,7 +1,6 @@
 Flexible REST API Flask with MongoDB 🚀
 
 📝 Quick Summary
-
 A robust and flexible RESTful API built with Flask and Python, designed to manage user data. Its key feature is the ability to dynamically connect to different MongoDB instances based on environment configuration, making it ideal for development, testing, and production.
 
 ✨ Project Overview
@@ -59,7 +58,11 @@ Docker and Docker Compose (Recommended, especially for the default development e
 Access to a MongoDB instance (for the production environment, usually a cluster on MongoDB Atlas; for development/testing, it can be local or Docker).
 
 1. Create and Activate a Virtual Environment (Recommended)
+First, create the virtual environment:
+
 python -m venv venv
+
+Then, activate it based on your operating system:
 
 On Linux/macOS:
 
@@ -74,6 +77,8 @@ On Windows (CMD):
 venv\Scripts\activate.bat
 
 2. Install Dependencies
+With the virtual environment activated, install the project dependencies:
+
 pip install -r requirements.txt
 
 3. MongoDB Database Configuration
@@ -208,6 +213,7 @@ docker-compose up --build
 
 Option 2: Local Execution (Without Docker)
 For Development Environment:
+
 On Linux/macOS:
 
 export FLASK_ENV=development # or can be omitted, as it's the default
@@ -224,6 +230,7 @@ set FLASK_ENV=development
 python wsgi.py
 
 For Production Environment:
+
 On Linux/macOS:
 
 export FLASK_ENV=production
@@ -240,6 +247,7 @@ set FLASK_ENV=production
 python wsgi.py
 
 For Testing Environment:
+
 On Linux/macOS:
 
 export FLASK_ENV=testing
