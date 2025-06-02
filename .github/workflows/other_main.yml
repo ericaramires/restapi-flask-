@@ -13,13 +13,11 @@ jobs:
     services:
       mongodb:
         image: mongo:latest
+        env:
+          MONGO_INITDB_ROOT_USERNAME: admin 
+          MONGO_INITDB_ROOT_PASSWORD: admin 
         ports:
-          - 27018:27017
-        options: >-
-          --health-cmd "mongosh --eval 'db.runCommand({serverStatus:1})' || mongo --eval 'db.runCommand({serverStatus:1})'"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          - 27018:27017 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,7 +25,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.12' 
 
       - name: Install dependencies
         run: |
