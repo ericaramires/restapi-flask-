@@ -104,4 +104,4 @@ class User(Resource):
 
 class Home(Resource):
     def get(self):
-        return {"message": "Bem-vindo à API!"}
+        return {"message": "Welcome to the API!"}
