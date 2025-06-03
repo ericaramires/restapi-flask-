@@ -68,8 +68,19 @@ jobs:
             print('Connection successful!');
           "
 
+      - name: Debug Environment Variables
+        run: |
+          echo "=== Environment Variables ==="
+          echo "GITHUB_ACTIONS: $GITHUB_ACTIONS"
+          echo "FLASK_ENV: $FLASK_ENV"
+          echo "MONGODB_HOST: $MONGODB_HOST"
+          echo "MONGODB_PORT: $MONGODB_PORT"
+          echo "MONGODB_DB: $MONGODB_DB"
+          echo "MONGODB_USERNAME: $MONGODB_USERNAME"
+          echo "============================"
+
       - name: Run tests
-        run: pytest -v --disable-warnings --tb=short
+        run: pytest -v --disable-warnings --tb=short -s
         env:
           FLASK_ENV: testing
           GITHUB_ACTIONS: true
