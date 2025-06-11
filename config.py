@@ -43,8 +43,9 @@ class MockConfig:
     Only for automated testing - not for production
     """
     MONGODB_DB = 'users_test'
-    MONGODB_HOST = 'mongodb'
-    MONGODB_PORT = 27017
+    # 👇 ALTERAÇÃO AQUI: Ler o host e a porta do ambiente
+    MONGODB_HOST = os.getenv('MONGODB_HOST', 'mongodb') 
+    MONGODB_PORT = int(os.getenv('MONGODB_PORT', 27017))
     MONGODB_USERNAME = os.getenv('MONGODB_TEST_USERNAME', 'admin')
     MONGODB_PASSWORD = os.getenv('MONGODB_TEST_PASSWORD', 'admin')
 
