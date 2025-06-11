@@ -71,21 +71,32 @@ The application uses the Factory Pattern (create_app):
 User data is structured using MongoEngine as follows:
 
 **cpf:** StringField (required, unique)
+
 **name:** StringField (required)
+
 **last_name:** StringField (required)
+
 **email:** EmailField (required)
+
 **birth_date:** DateField (required)
+
 
 ### 🔍 Advanced CPF Validation
 
 The system implements a multi-layered CPF validation to ensure data integrity:
+
 ✅ Format: Checks the XXX.XXX.XXX-XX pattern.
+
 ✅ Digits: Ensures the CPF contains 11 digits.
+
 ✅ Exceptions: Rejects CPFs with all identical digits (e.g., 111.111.111-11).
+
 ✅ Algorithm: Validates the check digits using the standard calculation.
+
 ✅ Uniqueness: Prevents the registration of a CPF that already exists in the database.
 
-🧪 Testing
+
+### 🧪 Testing
 The project has a complete test suite using pytest to ensure the API's quality and expected functionality.
 
 * **Isolated Environment:** Tests run with MockConfig, using a separate database (users_test) to avoid interfering with development data.
